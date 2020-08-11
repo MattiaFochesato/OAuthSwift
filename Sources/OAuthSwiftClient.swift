@@ -194,7 +194,9 @@ open class OAuthSwiftClient: NSObject {
     open func renewAccessToken(accessTokenUrl: URLConvertible?, withRefreshToken refreshToken: String, parameters: OAuthSwift.Parameters? = nil, headers: OAuthSwift.Headers? = nil, contentType: String? = nil, accessTokenBasicAuthentification: Bool = false, completionHandler completion: @escaping OAuthSwift.TokenCompletionHandler) -> OAuthSwiftRequestHandle? {
         var parameters = parameters ?? OAuthSwift.Parameters()
         parameters["client_id"] = self.credential.consumerKey
-        parameters["client_secret"] = self.credential.consumerSecret
+        if !self.consumerSecret.isEmpty {
+            parameters["client_secret"] = self.consumerSecret
+        }
         parameters["refresh_token"] = refreshToken
         parameters["grant_type"] = "refresh_token"
         OAuthSwift.log?.trace("Renew access token, parameters: \(parameters)")

@@ -309,6 +309,11 @@ open class OAuthSwiftCredential: NSObject, NSSecureCoding, Codable {
         case .oauth1:
             return ["Authorization": self.authorizationHeader(method: method, url: url, parameters: parameters, body: body)]
         case .oauth2:
+            if url.string.contains("spotify") {
+                if let gType = parameters["grant_type"] as? String, gType == "refresh_token" {
+                    return [:]
+                }
+            }
             return self.oauthToken.isEmpty ? [:] : ["Authorization": "Bearer \(self.oauthToken)"]
         }
     }
